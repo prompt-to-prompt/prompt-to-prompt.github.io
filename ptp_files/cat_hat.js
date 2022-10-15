@@ -65,5 +65,6 @@ function init() {
     }
 
 }
-
-$(document).ready(init);
+document.addEventListener("DOMContentLoaded", () => {
+  init();
+});
