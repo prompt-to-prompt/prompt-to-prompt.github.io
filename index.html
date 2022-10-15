@@ -35,7 +35,7 @@
   <p>Our method enables editing generated images by only modifying the textual prompt.
 
 
-    For example, here we first generate image from the input prompt "A cat with hat is lying on a beach chair." using the <a href="https://imagen.research.google/" style="text-decoration: none; color: black;">Imagen</a> text-to-image diffusion model. Then, with our approach, we can easily replace the hat or the main character. </p>
+    For example, here we first generate an image from the input prompt "A cat with a hat is lying on a beach chair." using the <a href="https://imagen.research.google/" style="text-decoration: none; color: black;">Imagen</a> text-to-image diffusion model. Then, with our approach, we can easily replace the hat or the main character. </p>
 
 
   <div class="cat-hat-main">
@@ -55,7 +55,7 @@
   <h2>Cross-Attention Control</h2>
 
   <p>
-    The key observation behind our method is that the spatial layout and geometry of an image depend on the cross-attention maps. Below, we can see that pixels are more attracted to the words that
+    The key observation behind our method is that the spatial layout and geometry of an image depend on the cross-attention maps. Below, we show that pixels are attend more to the words that
 describe them.
      </p>
     <img class="summary-img" src="./ptp_files/03_bird_and_bear.png" style="width:100%;">
@@ -63,7 +63,10 @@ describe them.
 Therefore, our main idea is to inject the cross-attention maps during the diffusion
 process, controlling which pixels attend to which tokens of the prompt text during which diffusion steps.
   To apply our approach to various creative editing applications, we show several methods to control the cross-attention maps through a simple and semantic interface. In the <i>word swap</i> control, we
-modify a token in the prompt (e.g., “dog” to “cat”), while fixing the cross-attention maps, to preserve the scene composition. In the second, <i>prompt refinement</i> control, we add new words to the prompt and freeze the attention on previous tokens while allowing new attention to flow to the new tokens. This enables us to perform global editing or modify a specific object. In the third, <i>attention Re-weighting</i> control, we amplify or attenuate the semantic effect of a word in the generated image.
+modify a token in the prompt (e.g., “dog” to “cat”), while fixing the cross-attention maps, to preserve the scene composition. In the second, <i>prompt refinement</i> control, we add new words to the prompt and freeze
+the attention to previous tokens while allowing new attention to flow to the new tokens. This enables us to perform global editing or modify a specific object.
+In the third, <i>attention Re-weighting</i> control, we increase or decrease the attention weights of specified tokens.
+      This results with amplification or attenuation of the semantic effect of the tokens on the generated image.
   </p>
 
   <img class="summary-img" src="./ptp_files/03_ca_diagram.png" style="width:100%;">
@@ -74,7 +77,7 @@ modify a token in the prompt (e.g., “dog” to “cat”), while fixing the cr
 <div class="content">
 
   <h3>Word Swap Examples</h3>
-  <p>In this case, the user swaps tokens of the original prompt with others, e.g., “a
+  <p>In this case, we swap tokens of the original prompt with others, e.g., “a
 basket with apples." to “a basket with oranges.”.</p>
   <img class="summary-img" src="./ptp_files/99_imagen_results_web-02.png" style="width:100%;">
 
@@ -107,7 +110,7 @@ specific words (marked with an arrow), we control the extent to which it influen
   <p>
     We thank Noa Glaser, Adi Zicher, Yaron Brodsky and Shlomi Fruchter for their valuable inputs that helped
     improve this work, and to Mohammad Norouzi, Chitwan Saharia and William Chan for providing us with
-    their support and the pretrained models of Imagen. Website template is borrowed from <a href="https://dreambooth.github.io/" style="text-decoration: none; color: black;">DreamBooth</a>.
+    their support and the pretrained models of Imagen. The website template is borrowed from <a href="https://dreambooth.github.io/" style="text-decoration: none; color: black;">DreamBooth</a>.
   </p>
 </div>
 </body>
