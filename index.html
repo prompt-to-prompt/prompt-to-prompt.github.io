@@ -2,7 +2,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Prompt-to-Prompt</title>
-<link href="./ptp_files/style.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
 <!--<script type="text/javascript" src="./ptp_files/jquery.mlens-1.0.min.js"></script>-->
 <!--<script type="text/javascript" src="./ptp_files/jquery.js"></script>-->
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
@@ -18,20 +18,26 @@
   </span></p>
   <br>
   <img src="./ptp_files/teaser.png" class="teaser-gif" style="width:100%;"><br>
-<!--  <h3 style="text-align:center"><em>It’s like a photo booth, but once the subject is captured, it can be synthesized wherever your dreams take you…</em></h3>-->
     <font size="+2">
           <p style="text-align: center;">
-            <a href="https://arxiv.org/abs/2208.01626" target="_blank">[Paper]</a> &nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="https://github.com/google/prompt-to-prompt/" target="_blank">[Code]</a>
+            <a href="https://arxiv.org/abs/2208.01626" target="_blank">Paper</a> &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="https://github.com/google/prompt-to-prompt/" target="_blank">Code</a>
           </p>
     </font>
 </div>
 <div class="content">
   <h2 style="text-align:center;">Abstract</h2>
-  <p>Recent large-scale text-driven synthesis diffusion models have attracted much attention thanks to their remarkable capabilities of generating highly diverse images that follow given text prompts. Therefore, it is only natural to build upon these synthesis models to provide text-driven image editing capabilities. However, Editing is challenging for these generative models, since an innate property of an editing technique is to preserve some content from the original image, while in the text-based models, even a small modification of the text prompt often leads to a completely different outcome. State-of-the-art methods mitigate this by requiring the users to provide a spatial mask to localize the edit, hence, ignoring the original structure and content within the masked region. In this paper, we pursue an intuitive <b>prompt-to-prompt</b> editing framework, where the edits are controlled by text only. We analyze a text-conditioned model in depth and observe that the cross-attention layers are the key to controlling the relation between the spatial layout of the image to each word in the prompt. With this observation, we propose to control the attention maps of the edited image by injecting the attention maps of the original image along the diffusion process. Our approach enables us to monitor the synthesis process by editing the textual prompt only, paving the way to a myriad of caption-based editing applications such as localized editing by replacing a word, global editing by adding a specification, and even controlling the extent to which a word is reflected in the image. We present our results over diverse images and prompts with different text-to-image models, demonstrating high-quality synthesis and fidelity to the edited prompts.< /p>
+  <p>Recent large-scale text-driven synthesis diffusion models have attracted much attention thanks to their remarkable capabilities of generating highly diverse images that follow given text prompts. Therefore, it is only natural to build upon these synthesis models to provide text-driven image editing capabilities. However, Editing is challenging for these generative models, since an innate property of an editing technique is to preserve some content from the original image, while in the text-based models, even a small modification of the text prompt often leads to a completely different outcome. State-of-the-art methods mitigate this by requiring the users to provide a spatial mask to localize the edit, hence, ignoring the original structure and content within the masked region. In this paper, we pursue an intuitive <b>prompt-to-prompt</b> editing framework, where the edits are controlled by text only. We analyze a text-conditioned model in depth and observe that the cross-attention layers are the key to controlling the relation between the spatial layout of the image to each word in the prompt. With this observation, we propose to control the attention maps of the edited image by injecting the attention maps of the original image along the diffusion process. Our approach enables us to monitor the synthesis process by editing the textual prompt only, paving the way to a myriad of caption-based editing applications such as localized editing by replacing a word, global editing by adding a specification, and even controlling the extent to which a word is reflected in the image. We present our results over diverse images and prompts with different text-to-image models, demonstrating high-quality synthesis and fidelity to the edited prompts.</p>
 </div>
 <div class="content">
+
   <h2>Prompt-to-Prompt Image Editing</h2>
+  <p>Our method enables editing generated images by only modifying the textual prompt.
+
+
+    For example, here we first generate image from the input prompt "A cat with hat is lying on a beach chair." using the <a href="https://imagen.research.google/" style="text-decoration: none; color: black;">Imagen</a> text-to-image diffusion model. Then, with our approach, we can easily replace the hat or the main character. </p>
+
+
   <div class="cat-hat-main">
     <img class="cat-hat-img" id="cat-hat-img" src="./ptp_files/cat_default.png">
    <div class="cat-hat-text"> "A <br><br> <span class="cat-hat-bracket"><span class="cat-hat-button_a">cat</span> &ensp;&ensp;&ensp;&ensp;&ensp; <span class="cat-hat-button_a">leopard</span> &ensp;&ensp;&ensp;&ensp;&ensp; <span class="cat-hat-button_a">lion</span> &ensp;&ensp;&ensp;&ensp;&ensp; <span class="cat-hat-button_a">horse</span> &ensp;&ensp;&ensp;&ensp;&ensp; <span class="cat-hat-button_a">turtle</span> &ensp;&ensp;&ensp;&ensp;&ensp; <span class="cat-hat-button_a">elephant</span> &ensp;&ensp;&ensp;&ensp;&ensp; <span class="cat-hat-button_a">giraffe</span> &ensp;&ensp;&ensp;&ensp;&ensp; <span class="cat-hat-button_a">koala</span></span>
@@ -45,27 +51,43 @@
   <br>
 </div>
 <div class="content">
+
   <h2>Cross-Attention Control</h2>
-  <p> Our method takes as input a few images (typically 3-5 images suffice, based on our experiments) of a subject (e.g., a specific dog) and the corresponding class name (e.g. "dog"), and returns a fine-tuned/"personalized'' text-to-image model that encodes a unique identifier that refers to the subject. Then, at inference, we can implant the unique identifier in different sentences to synthesize the subjects in difference contexts.</p>
-  <br>
-  <img class="summary-img" src="./ptp_files/03_bird_and_bear.png" style="width:100%;"> <br>
-  <p>Given ~3-5 images of a subject we fine tune a text-to-image diffusion in two steps: (a) fine tuning the low-resolution text-to-image model with the input images paired with a text prompt containing a unique identifier and the name of the class the subject belongs to (e.g., "A photo of a [T] dog”), in parallel, we apply a class-specific prior preservation loss, which leverages the semantic prior that the model has on the class and encourages it to generate diverse instances belong to the subject's class by injecting the class name in the text prompt (e.g., "A photo of a dog”). (b) fine-tuning the super resolution components with pairs of low-resolution and high-resolution images taken from our input images set, which enables us to maintain high-fidelity to small details of the subject.</p>
-  <br>
-  <img class="summary-img" src="./ptp_files/03_ca_diagram.png" style="width:100%;"> <br>
+
+  <p>
+    The key observation behind our method is that the spatial layout and geometry of an image depend on the cross-attention maps. Below, we can see that pixels are more attracted to the words that
+describe them.
+     </p>
+    <img class="summary-img" src="./ptp_files/03_bird_and_bear.png" style="width:100%;">
+    <p>
+Therefore, our main idea is to inject the cross-attention maps during the diffusion
+process, controlling which pixels attend to which tokens of the prompt text during which diffusion steps.
+  To apply our approach to various creative editing applications, we show several methods to control the cross-attention maps through a simple and semantic interface. In the <i>word swap</i> control, we
+modify a token in the prompt (e.g., “dog” to “cat”), while fixing the cross-attention maps, to preserve the scene composition. In the second, <i>prompt refinement</i> control, we add new words to the prompt and freeze the attention on previous tokens while allowing new attention to flow to the new tokens. This enables us to perform global editing or modify a specific object. In the third, <i>attention Re-weighting</i> control, we amplify or attenuate the semantic effect of a word in the generated image.
+  </p>
+
+  <img class="summary-img" src="./ptp_files/03_ca_diagram.png" style="width:100%;">
+
+
+
 </div>
 <div class="content">
-  <h2>Results</h2>
-  <h2>Word Swap</h2>
-  <p>Results for re-contextualization of a bag and vase subject instances. By finetuning a model using our method we are able to generate different images of the a subject instance in different environments, with high preservation of subject details and realistic interaction between the scene and the subject. We display the conditioning prompts below each image. </p>
+
+  <h3>Word Swap Examples</h3>
+  <p>In this case, the user swaps tokens of the original prompt with others, e.g., “a
+basket with apples." to “a basket with oranges.”.</p>
   <img class="summary-img" src="./ptp_files/99_imagen_results_web-02.png" style="width:100%;">
 
-  <h2>Prompt Refinement</h2>
+  <h3>Prompt Refinement Examples</h3>
+  <p>By extending the initial prompt, we perform local or global editing. </p>
    <img class="summary-img" src="./ptp_files/99_imagen_results_web-03.png" style="width:100%;">
-    <h2>Attention Re-weighting</h2>
+    <h3>Attention Re-weighting Examples</h3>
+   <p>By reducing or increasing the cross-attention of
+specific words (marked with an arrow), we control the extent to which it influences the generation.</p>
    <img class="summary-img" src="./ptp_files/99_imagen_results_web-04.png" style="width:100%;">
-</div>
-<div class="content">
 
+
+<br>
   <h2>Text-to-Image Style Transfer</h2>
   <p>By adding a style description to the prompt while injecting the source attention maps, we can create various images in the new desired styles that preserve the structure of the original image.</p>
   <br>
@@ -73,20 +95,19 @@
 </div>
 
 <div class="content">
-  <h2>BibTex</h2>
-  <code> @article{hertz2022prompt,<br>
+  <h4>BibTex</h4>
+  <p> @article{hertz2022prompt,<br>
   &nbsp;&nbsp;title={Prompt-to-prompt image editing with cross attention control},<br>
   &nbsp;&nbsp;author={Hertz, Amir and Mokady, Ron and Tenenbaum, Jay and Aberman, Kfir and Pritch, Yael and Cohen-Or, Daniel},<br>
   &nbsp;&nbsp;booktitle={arXiv preprint arXiv:2208.01626},<br>
   &nbsp;&nbsp;year={2022}<br>
-  } </code> 
-</div>
-<div class="content" id="acknowledgements">
-  <p><strong>Acknowledgements</strong>:
+  } </p>
+<br>
+   <h4>Acknowledgements</h4>
+  <p>
     We thank Noa Glaser, Adi Zicher, Yaron Brodsky and Shlomi Fruchter for their valuable inputs that helped
     improve this work, and to Mohammad Norouzi, Chitwan Saharia and William Chan for providing us with
-    their support and the pretrained models of Imagen. Website template is borrowed from <a href="https://dreambooth.github.io/">DreamBooth</a>.
-
+    their support and the pretrained models of Imagen. Website template is borrowed from <a href="https://dreambooth.github.io/" style="text-decoration: none; color: black;">DreamBooth</a>.
   </p>
 </div>
 </body>
