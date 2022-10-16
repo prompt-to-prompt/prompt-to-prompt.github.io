@@ -34,7 +34,6 @@
   <h2>Prompt-to-Prompt Image Editing</h2>
   <p>Our method enables editing generated images by only modifying the textual prompt.
 
-
     For example, here we first generate an image from the input prompt "A cat with a hat is lying on a beach chair." using the <a href="https://imagen.research.google/" style="text-decoration: none; color: black;">Imagen</a> text-to-image diffusion model. Then, with our approach, we can easily replace the hat or the main character. </p>
 
 
@@ -44,10 +43,26 @@
      <br><br> with a <br><br>
      <span class="cat-hat-bracket">  <span class="cat-hat-button_b">...</span> &ensp;&ensp;&ensp;&ensp;&ensp; <span class="cat-hat-button_b">floral</span> &ensp;&ensp;&ensp;&ensp;&ensp; <span class="cat-hat-button_b">cylinder</span> &ensp;&ensp;&ensp;&ensp;&ensp; <span class="cat-hat-button_b">police</span> &ensp;&ensp;&ensp;&ensp;&ensp; <span class="cat-hat-button_b">straw</span> &ensp;&ensp;&ensp;&ensp;&ensp; <span class="cat-hat-button_b">swimming</span> &ensp;&ensp;&ensp;&ensp;&ensp; <span class="cat-hat-button_b">pirates</span> &ensp;&ensp;&ensp;&ensp;&ensp; <span class="cat-hat-button_b">musketeer</span> &ensp;&ensp;&ensp;&ensp;&ensp; <span class="cat-hat-button_b">clown</span> &ensp;&ensp;&ensp;&ensp;&ensp; <span class="cat-hat-button_b">unicorn</span></span>
     <br><br> hat is lying on a beach chair." </div>
-  <div >
+  <div>
 
     </div>
+
   </div>
+     <br>
+
+    <p>Another prompt editing example is modifying the semantic influence of specific words in the prompt over the generated image.
+        Using our method, we can amplify or attenuate the "fluffiness" of the bunny doll in the image below.
+       </p>
+    <div class="cat-hat-main">
+
+         <img class="cat-hat-img" id="bunny-img" src="./ptp_files/bunny_seq/fluffy_bunny_42.png"><br>
+         <div class="cat-hat-text">
+
+             <span style="display: block; text-align: center">"My <span id ="fluffy" style="background-color: #f88000;">fluffy</span> bunny doll." </span><br>
+            <input type="range" min="16" max="68" value="42" class="slider" id="range_bunny">
+
+            </div>
+    </div>
   <br>
 </div>
 <div class="content">
